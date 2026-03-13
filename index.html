@@ -406,6 +406,28 @@
     .wr-bar { height: 6px; border-radius: 3px; background: var(--c-border); overflow: hidden; margin-top: 4px; }
     .wr-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
 
+    /* ── Fund Flow (Deposits & Withdrawals) Review ── */
+    .fund-flow-panel { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1rem; }
+    .fund-flow-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    @media (min-width: 640px) { .fund-flow-kpis { grid-template-columns: repeat(4, 1fr); } }
+    .fund-kpi { background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 1rem; padding: 0.875rem 1rem; }
+    .fund-kpi-label { font-size: 0.62rem; color: var(--c-subtle); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+    .fund-kpi-value { font-size: 1.25rem; font-weight: 800; }
+    .fund-flow-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .fund-flow-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 0.875rem; transition: background 0.1s; }
+    .fund-flow-item:hover { background: var(--c-border); }
+    .fund-flow-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+    .fund-flow-icon.dep  { background: var(--c-emerald-bg); }
+    .fund-flow-icon.wth  { background: var(--c-red-bg); }
+    .fund-flow-info { flex: 1; min-width: 0; }
+    .fund-flow-type { font-size: 0.78rem; font-weight: 700; }
+    .fund-flow-meta { font-size: 0.68rem; color: var(--c-subtle); margin-top: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fund-flow-amount { font-size: 0.95rem; font-weight: 800; flex-shrink: 0; }
+    .fund-flow-empty { text-align: center; padding: 2rem; color: var(--c-muted); font-size: 0.82rem; }
+    .fund-flow-tabs { display: flex; gap: 0.4rem; margin-bottom: 0.875rem; flex-wrap: wrap; }
+    .fund-tab-btn { padding: 0.3rem 0.85rem; border-radius: 999px; border: 1px solid var(--c-border); background: none; color: var(--c-subtle); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .fund-tab-btn.active { background: var(--c-emerald-d); border-color: var(--c-emerald-d); color: #fff; }
+
     /* ── AI Insights ── */
     .ai-insights-panel { background: linear-gradient(135deg, #0a1f14 0%, #0d1f1a 100%); border: 1px solid #1a3a2a; border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1rem; }
     .ai-insights-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
@@ -473,6 +495,57 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: var(--c-bg); }
     ::-webkit-scrollbar-thumb { background: var(--c-border-2); border-radius: 3px; }
+
+    /* ============================================================
+       DEPOSIT / WITHDRAWAL MODALS
+    ============================================================ */
+    .balance-actions-btn { 
+        background: var(--c-emerald-d); border: none; 
+        color: #fff; padding: 0.55rem 1rem; font-size: 0.8rem; 
+        font-weight: 700; border-radius: 0.75rem; cursor: pointer; 
+        margin-top: 0.5rem; margin-right: 0.5rem; transition: background 0.15s;
+        display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+    }
+    .balance-actions-btn:hover { background: var(--c-emerald); }
+    .balance-actions-btn.withdraw { background: var(--c-red-d); }
+    .balance-actions-btn.withdraw:hover { background: var(--c-red); }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 500; align-items: flex-end; justify-content: center; }
+    @media (min-width: 640px) { .modal-overlay { align-items: center; padding: 1rem; } }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 1.25rem 1.25rem 0 0; width: 100%; max-width: 680px; max-height: 92vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+    @media (min-width: 640px) { .modal-box { border-radius: 1.5rem; max-height: 85vh; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { position: sticky; top: 0; background: var(--c-surface); border-bottom: 1px solid var(--c-border); padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-weight: 700; font-size: 0.95rem; }
+    .modal-close { width: 2rem; height: 2rem; border-radius: 50%; background: var(--c-border); border: none; color: var(--c-mid); cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { background: var(--c-border-2); color: var(--c-white); }
+    .modal-body { padding: 1.25rem; }
+    .modal-footer { position: sticky; bottom: 0; background: var(--c-surface); border-top: 1px solid var(--c-border); padding: 1rem 1.25rem; display: flex; gap: 0.75rem; }
+    .modal-form-group { margin-bottom: 1.25rem; }
+    .modal-form-label { display: block; font-size: 0.75rem; color: var(--c-subtle); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; }
+    .modal-form-input, .modal-form-select, .modal-form-textarea {
+        width: 100%; background: var(--c-border); border: 1px solid var(--c-border-2);
+        border-radius: 0.875rem; padding: 0.85rem 1rem; color: var(--c-white);
+        outline: none; transition: all 0.15s; font-size: 0.95rem;
+    }
+    .modal-form-input:focus, .modal-form-select:focus, .modal-form-textarea:focus {
+        border-color: var(--c-emerald); background: #2d2d30;
+    }
+    .modal-form-input::placeholder { color: var(--c-muted); }
+    .modal-form-textarea { resize: vertical; min-height: 80px; }
+    .btn-confirm { width: 100%; padding: 0.9rem; border-radius: 0.875rem; border: none; background: var(--c-emerald-d); color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .btn-confirm:hover { background: var(--c-emerald); }
+    .btn-confirm:disabled { background: var(--c-muted); cursor: not-allowed; }
+    .btn-cancel { flex: 1; padding: 0.9rem; border-radius: 0.875rem; border: 1px solid var(--c-border); background: transparent; color: var(--c-white); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .btn-cancel:hover { background: var(--c-border); }
+
+    /* Toast notifications */
+    .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%); z-index: 2000; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; white-space: nowrap; animation: toastIn 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    @media (min-width: 768px) { .toast { bottom: 2rem; } }
+    .toast-success { background: var(--c-emerald-dk); color: #fff; }
+    .toast-error   { background: #991b1b; color: #fff; }
+    @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
     </style>
 </head>
 <body>
@@ -607,6 +680,10 @@
             <div class="stat-card stat-pl"><div class="stat-label">Net P/L</div><div id="stat-pl" class="stat-value">$0.00</div></div>
             <div class="stat-card"><div class="stat-label">Avg Duration</div><div id="stat-avg" class="stat-value">0 min</div></div>
             <div class="stat-card"><div class="stat-label">Balance</div><div id="stat-balance" class="stat-value">$0.00</div></div>
+        </div>
+        <div style="display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap">
+            <button class="balance-actions-btn" onclick="openDepositModal()"><i class="fas fa-arrow-down"></i> Deposit</button>
+            <button class="balance-actions-btn withdraw" onclick="openWithdrawalModal()"><i class="fas fa-arrow-up"></i> Withdraw</button>
         </div>
         <div class="charts-grid">
             <div class="panel"><div class="panel-title">📈 Cumulative P/L</div><canvas id="cumulativeChart"></canvas></div>
@@ -875,6 +952,38 @@
             <div class="best-asset-grid" id="reviewAssetGrid"></div>
         </div>
 
+        <!-- Deposits & Withdrawals Review -->
+        <div class="fund-flow-panel" id="reviewFundFlow">
+            <div class="panel-title" style="margin-bottom:0.875rem">💳 Deposits & Withdrawals — All Time</div>
+            <!-- KPIs -->
+            <div class="fund-flow-kpis">
+                <div class="fund-kpi">
+                    <div class="fund-kpi-label">Total Deposited</div>
+                    <div class="fund-kpi-value" id="ff-total-dep" style="color:var(--c-emerald-l)">$0.00</div>
+                </div>
+                <div class="fund-kpi">
+                    <div class="fund-kpi-label">Total Withdrawn</div>
+                    <div class="fund-kpi-value" id="ff-total-wth" style="color:var(--c-red-l)">$0.00</div>
+                </div>
+                <div class="fund-kpi">
+                    <div class="fund-kpi-label">Net Flow</div>
+                    <div class="fund-kpi-value" id="ff-net-flow">$0.00</div>
+                </div>
+                <div class="fund-kpi">
+                    <div class="fund-kpi-label">Transactions</div>
+                    <div class="fund-kpi-value" id="ff-count" style="color:var(--c-mid)">0</div>
+                </div>
+            </div>
+            <!-- Filter tabs -->
+            <div class="fund-flow-tabs">
+                <button class="fund-tab-btn active" id="ffTab-all" onclick="setFundTab('all')">All</button>
+                <button class="fund-tab-btn" id="ffTab-deposits" onclick="setFundTab('deposits')">Deposits</button>
+                <button class="fund-tab-btn" id="ffTab-withdrawals" onclick="setFundTab('withdrawals')">Withdrawals</button>
+            </div>
+            <!-- Transaction list -->
+            <div class="fund-flow-list" id="ff-list"></div>
+        </div>
+
         <!-- AI Insights Panel -->
         <div class="ai-insights-panel" id="reviewInsightsPanel">
             <div class="ai-insights-header">
@@ -966,6 +1075,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
 /* ====================== GLOBALS ====================== */
 let trades = [], startingBalance = 0, currentEditId = null, charts = {};
 let currentUser = null;
+let allDeposits = [], allWithdrawals = [];
 
 /* ====================== HELPERS ====================== */
 function showToast(msg, type = 'success') {
@@ -1091,7 +1201,7 @@ async function handleRegister() {
 async function handleLogout() {
     closeUserMenu();
     currentUser = null;
-    trades = []; startingBalance = 0;
+    trades = []; startingBalance = 0; allDeposits = []; allWithdrawals = [];
     await db.auth.signOut();
     showLoginScreen();
 }
@@ -1121,7 +1231,7 @@ function updateUserUI(user) {
 /* ====================== AUTH STATE ====================== */
 function showLoginScreen() {
     currentUser = null;
-    trades = []; startingBalance = 0;
+    trades = []; startingBalance = 0; allDeposits = []; allWithdrawals = [];
     document.getElementById('appScreen').classList.remove('visible');
     document.getElementById('authScreen').classList.remove('hidden');
     document.getElementById('authScreen').classList.add('visible');
@@ -1167,18 +1277,22 @@ async function loadData() {
     document.getElementById('dbStatus').innerHTML =
         `<span class="dot" style="background:var(--c-yellow);animation:pulse 1.5s infinite"></span><span style="color:var(--c-subtle)">Connecting...</span>`;
     try {
-        // Parallel fetch — both queries fire at the same time (mirrors index.html)
-        const [settingsRes, tradesRes] = await Promise.all([
+        // Parallel fetch — all queries at once
+        const [settingsRes, tradesRes, depositsRes, withdrawalsRes] = await Promise.all([
             db.from('journal_settings')
                 .select('value').eq('key','starting_balance')
                 .eq('user_id', currentUser.id).maybeSingle(),
             db.from('trades')
                 .select('*').eq('user_id', currentUser.id)
                 .order('opened', { ascending: true }),
+            db.from('deposits').select('*').eq('user_id', currentUser.id),
+            db.from('withdrawals').select('*').eq('user_id', currentUser.id),
         ]);
         if (tradesRes.error) throw tradesRes.error;
         startingBalance = settingsRes.data ? parseFloat(settingsRes.data.value) : 0;
         trades          = tradesRes.data || [];
+        allDeposits     = depositsRes.data || [];
+        allWithdrawals  = withdrawalsRes.data || [];
         _loadRetries    = 0;
         document.getElementById('dbStatus').innerHTML =
             `<span class="dot dot-green"></span><span style="color:var(--c-emerald)">Connected</span>`;
@@ -1204,13 +1318,31 @@ async function loadData() {
 
 /* ====================== RUNNING BALANCE ====================== */
 function getRunningBalances() {
-    let b = startingBalance; const out = [b];
-    trades.forEach(t => {
-        if (t.result==='Win')       b += t.investment*(t.payout/100)-(t.fees||0);
-        else if (t.result==='Loss') b += -t.investment-(t.fees||0);
-        out.push(b);
+    // Build chronological timeline of trades + deposits + withdrawals
+    const events = [];
+    trades.forEach((t, i) => events.push({ time: new Date(t.opened).getTime(), type:'trade', idx: i }));
+    allDeposits.forEach(d => events.push({ time: new Date(d.created_at).getTime(), type:'deposit', amount: parseFloat(d.amount||0) }));
+    allWithdrawals.forEach(w => events.push({ time: new Date(w.created_at).getTime(), type:'withdrawal', amount: parseFloat(w.amount||0) }));
+    // Sort by time; deposits/withdrawals apply before a trade at the same millisecond
+    events.sort((a, b) => {
+        if (a.time !== b.time) return a.time - b.time;
+        return a.type !== 'trade' ? -1 : 1;
     });
-    return out;
+
+    let b = startingBalance;
+    const tradeBalances = new Array(trades.length + 1).fill(null);
+    tradeBalances[0] = b;
+    events.forEach(ev => {
+        if      (ev.type === 'deposit')    b += ev.amount;
+        else if (ev.type === 'withdrawal') b -= ev.amount;
+        else {
+            const t = trades[ev.idx];
+            if (t.result === 'Win')       b += t.investment * (t.payout / 100) - (t.fees || 0);
+            else if (t.result === 'Loss') b += -t.investment - (t.fees || 0);
+            tradeBalances[ev.idx + 1] = b;
+        }
+    });
+    return tradeBalances;
 }
 
 /* ====================== TABS ====================== */
@@ -1278,11 +1410,12 @@ document.getElementById('tradeForm').addEventListener('submit', async function(e
         };
 
         if (currentEditId) {
-            const {error} = await db.from('trades').update(trade).eq('trade_id', currentEditId).eq('user_id', currentUser.id);
-            if (error) throw error;
-            const i = trades.findIndex(t=>t.trade_id===currentEditId);
-            if (i!==-1) trades[i]=trade;
-        } else {
+    const { trade_id, user_id, ...updatePayload } = trade;
+    const {error} = await db.from('trades').update(updatePayload).eq('trade_id', currentEditId).eq('user_id', currentUser.id);
+    if (error) throw error;
+    const i = trades.findIndex(t=>t.trade_id===currentEditId);
+    if (i!==-1) trades[i]=trade;
+    } else {
             const {data, error} = await db.from('trades').insert(trade).select().single();
             if (error) throw error;
             trades.push(data);
@@ -1475,40 +1608,150 @@ function exportCSV() {
 }
 
 /* ====================== DASHBOARD ====================== */
-function renderDashboard() {
-    const total   = trades.length;
-    const wins    = trades.filter(t=>t.result==='Win').length;
-    const losses  = trades.filter(t=>t.result==='Loss').length;
-    const ties    = trades.filter(t=>t.result==='Tie').length;
-    const winrate = total?(wins/total*100).toFixed(1):0;
-    const netPL   = trades.reduce((a,t)=>a+parseFloat(t.pl||0),0);
-    const finBal  = startingBalance+netPL;
-    const avgDur  = total?(trades.reduce((a,t)=>a+t.expiry,0)/total).toFixed(0):0;
+async function renderDashboard() {
+    try {
+        const total   = trades.length;
+        const wins    = trades.filter(t=>t.result==='Win').length;
+        const losses  = trades.filter(t=>t.result==='Loss').length;
+        const ties    = trades.filter(t=>t.result==='Tie').length;
+        const winrate = total?(wins/total*100).toFixed(1):0;
+        const netPL   = trades.reduce((a,t)=>a+parseFloat(t.pl||0),0);
+        
+        // ===== DEPOSITS & WITHDRAWALS from globals =====
+        const totalDeposits    = allDeposits.reduce((s, d) => s + parseFloat(d.amount || 0), 0);
+        const totalWithdrawals = allWithdrawals.reduce((s, w) => s + parseFloat(w.amount || 0), 0);
 
-    document.getElementById('stat-total').textContent   = total;
-    document.getElementById('stat-winrate').textContent = winrate+'%';
-    document.getElementById('stat-avg').textContent     = avgDur+' min';
-    const plEl = document.getElementById('stat-pl');
-    plEl.textContent = '$'+netPL.toFixed(2);
-    plEl.style.color = netPL>=0?'var(--c-emerald-l)':'var(--c-red-l)';
-    const balEl = document.getElementById('stat-balance');
-    balEl.textContent = '$'+finBal.toFixed(2);
-    balEl.style.color = finBal>=startingBalance?'var(--c-emerald-l)':'var(--c-red-l)';
+        // ===== CALCULATE FINAL BALANCE =====
+        const finBal = startingBalance + totalDeposits - totalWithdrawals + netPL;
+        const avgDur = total?(trades.reduce((a,t)=>a+t.expiry,0)/total).toFixed(0):0;
 
-    const sorted=[...trades].sort((a,b)=>new Date(a.opened)-new Date(b.opened));
-    let cum=startingBalance;
-    const cumData=[startingBalance,...sorted.map(t=>{cum+=parseFloat(t.pl||0);return cum;})];
+        // ===== UPDATE ALL STAT CARDS =====
+        document.getElementById('stat-total').textContent   = total;
+        document.getElementById('stat-winrate').textContent = winrate+'%';
+        document.getElementById('stat-avg').textContent     = avgDur+' min';
+        
+        // Update Net P/L
+        const plEl = document.getElementById('stat-pl');
+        plEl.textContent = '$'+netPL.toFixed(2);
+        plEl.style.color = netPL>=0?'var(--c-emerald-l)':'var(--c-red-l)';
+        
+        // Update Balance (includes deposits/withdrawals)
+        const balEl = document.getElementById('stat-balance');
+        balEl.textContent = '$'+finBal.toFixed(2);
+        balEl.style.color = finBal>=startingBalance?'var(--c-emerald-l)':'var(--c-red-l)';
 
-    if (charts.cum)     charts.cum.destroy();
-    if (charts.pie)     charts.pie.destroy();
-    if (charts.session) charts.session.destroy();
+        // ===== DESTROY OLD CHARTS =====
+        if (charts.cum)     charts.cum.destroy();
+        if (charts.pie)     charts.pie.destroy();
+        if (charts.session) charts.session.destroy();
 
-    const gc='#27272a', tc='#71717a', base={responsive:true,maintainAspectRatio:false};
-    charts.cum = new Chart(document.getElementById('cumulativeChart'),{type:'line',data:{labels:['Start',...sorted.map((_,i)=>i+1)],datasets:[{label:'Balance',data:cumData,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.08)',tension:0.4,borderWidth:2.5,fill:true,pointRadius:2,pointHoverRadius:5}]},options:{...base,plugins:{legend:{display:false}},scales:{y:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},x:{grid:{color:gc},ticks:{color:tc,font:{size:10},maxTicksLimit:8}}}}});
-    charts.pie = new Chart(document.getElementById('pieChart'),{type:'doughnut',data:{labels:['Wins','Losses','Ties'],datasets:[{data:[wins,losses,ties],backgroundColor:['#10b981','#ef4444','#facc15'],borderWidth:0,hoverOffset:6}]},options:{...base,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#a1a1aa',padding:12,font:{size:12}}}}}});
-    const sessions={};
-    trades.forEach(t=>{const s=t.session||'Other';sessions[s]=(sessions[s]||0)+1;});
-    charts.session = new Chart(document.getElementById('sessionChart'),{type:'bar',data:{labels:Object.keys(sessions),datasets:[{label:'Trades',data:Object.values(sessions),backgroundColor:'rgba(16,185,129,0.75)',borderRadius:8,borderSkipped:false}]},options:{...base,plugins:{legend:{display:false}},scales:{y:{ticks:{stepSize:1,color:tc,font:{size:11}},grid:{color:gc}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+        // ===== PREPARE CHART DATA (interleaved with deposits/withdrawals) =====
+        const sorted=[...trades].sort((a,b)=>new Date(a.opened)-new Date(b.opened));
+        const chartEvents = [];
+        sorted.forEach((t,i) => chartEvents.push({ time: new Date(t.opened).getTime(), type:'trade', t, label:`#${i+1}` }));
+        allDeposits.forEach(d => chartEvents.push({ time: new Date(d.created_at).getTime(), type:'deposit', amount: parseFloat(d.amount||0) }));
+        allWithdrawals.forEach(w => chartEvents.push({ time: new Date(w.created_at).getTime(), type:'withdrawal', amount: parseFloat(w.amount||0) }));
+        chartEvents.sort((a,b) => a.time !== b.time ? a.time - b.time : (a.type !== 'trade' ? -1 : 1));
+        let cum = startingBalance;
+        const cumLabels = ['Start'], cumData = [cum];
+        chartEvents.forEach(ev => {
+            if (ev.type==='deposit')    { cum += ev.amount; cumLabels.push('DEP'); cumData.push(parseFloat(cum.toFixed(2))); }
+            else if (ev.type==='withdrawal') { cum -= ev.amount; cumLabels.push('WTH'); cumData.push(parseFloat(cum.toFixed(2))); }
+            else { cum += parseFloat(ev.t.pl||0); cumLabels.push(ev.label); cumData.push(parseFloat(cum.toFixed(2))); }
+        });
+
+        // ===== CREATE CHARTS WITH NEW DATA =====
+        const gc='#27272a', tc='#71717a', base={responsive:true,maintainAspectRatio:false};
+        
+        // Cumulative P/L Chart
+        charts.cum = new Chart(document.getElementById('cumulativeChart'),{
+            type:'line',
+            data:{
+                labels: cumLabels,
+                datasets:[{
+                    label:'Balance',
+                    data:cumData,
+                    borderColor:'#10b981',
+                    backgroundColor:'rgba(16,185,129,0.08)',
+                    tension:0.4,
+                    borderWidth:2.5,
+                    fill:true,
+                    pointRadius:2,
+                    pointHoverRadius:5
+                }]
+            },
+            options:{
+                ...base,
+                plugins:{legend:{display:false}},
+                scales:{
+                    y:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},
+                    x:{grid:{color:gc},ticks:{color:tc,font:{size:10},maxTicksLimit:8}}
+                }
+            }
+        });
+        
+        // Win/Loss Pie Chart
+        charts.pie = new Chart(document.getElementById('pieChart'),{
+            type:'doughnut',
+            data:{
+                labels:['Wins','Losses','Ties'],
+                datasets:[{
+                    data:[wins,losses,ties],
+                    backgroundColor:['#10b981','#ef4444','#facc15'],
+                    borderWidth:0,
+                    hoverOffset:6
+                }]
+            },
+            options:{
+                ...base,
+                cutout:'60%',
+                plugins:{
+                    legend:{
+                        position:'bottom',
+                        labels:{
+                            color:'#a1a1aa',
+                            padding:12,
+                            font:{size:12}
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Session Chart
+        const sessions={};
+        trades.forEach(t=>{const s=t.session||'Other';sessions[s]=(sessions[s]||0)+1;});
+        charts.session = new Chart(document.getElementById('sessionChart'),{
+            type:'bar',
+            data:{
+                labels:Object.keys(sessions),
+                datasets:[{
+                    label:'Trades',
+                    data:Object.values(sessions),
+                    backgroundColor:'rgba(16,185,129,0.75)',
+                    borderRadius:8,
+                    borderSkipped:false
+                }]
+            },
+            options:{
+                ...base,
+                plugins:{legend:{display:false}},
+                scales:{
+                    y:{
+                        ticks:{stepSize:1,color:tc,font:{size:11}},
+                        grid:{color:gc}
+                    },
+                    x:{
+                        ticks:{color:tc,font:{size:11}},
+                        grid:{display:false}
+                    }
+                }
+            }
+        });
+        
+    } catch(err) {
+        console.error('Dashboard render error:', err);
+    }
 }
 
 /* ====================== REVIEWS ====================== */
@@ -1779,6 +2022,79 @@ function renderReviews() {
     const aiBtn = document.getElementById('aiAnalyzeBtn');
     aiBtn.disabled = false;
     aiBtn.innerHTML = '<i class="fas fa-robot"></i> Analyze My Trades';
+
+    // Render fund flow section (all-time, not period-filtered)
+    renderFundFlow();
+}
+
+/* ====================== FUND FLOW (DEPOSITS & WITHDRAWALS) ====================== */
+let fundFlowTab = 'all';
+
+function setFundTab(tab) {
+    fundFlowTab = tab;
+    ['all','deposits','withdrawals'].forEach(t => {
+        document.getElementById(`ffTab-${t}`).classList.toggle('active', t === tab);
+    });
+    renderFundFlowList();
+}
+
+function renderFundFlow() {
+    // KPIs — all-time totals
+    const totalDep = allDeposits.reduce((s, d) => s + parseFloat(d.amount || 0), 0);
+    const totalWth = allWithdrawals.reduce((s, w) => s + parseFloat(w.amount || 0), 0);
+    const netFlow  = totalDep - totalWth;
+    const count    = allDeposits.length + allWithdrawals.length;
+
+    document.getElementById('ff-total-dep').textContent = '$' + totalDep.toFixed(2);
+    document.getElementById('ff-total-wth').textContent = '$' + totalWth.toFixed(2);
+    const netEl = document.getElementById('ff-net-flow');
+    netEl.textContent = (netFlow >= 0 ? '+' : '') + '$' + Math.abs(netFlow).toFixed(2);
+    netEl.style.color = netFlow >= 0 ? 'var(--c-emerald-l)' : 'var(--c-red-l)';
+    document.getElementById('ff-count').textContent = count;
+
+    renderFundFlowList();
+}
+
+function renderFundFlowList() {
+    // Build combined list sorted newest first
+    const items = [];
+    allDeposits.forEach(d => items.push({
+        type: 'deposit', amount: parseFloat(d.amount || 0),
+        date: d.created_at, method: d.payment_method || '—', reason: d.reason || ''
+    }));
+    allWithdrawals.forEach(w => items.push({
+        type: 'withdrawal', amount: parseFloat(w.amount || 0),
+        date: w.created_at, method: w.withdrawal_method || '—', reason: w.reason || ''
+    }));
+    items.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Filter
+    const filtered = fundFlowTab === 'all' ? items
+        : items.filter(i => i.type === (fundFlowTab === 'deposits' ? 'deposit' : 'withdrawal'));
+
+    const list = document.getElementById('ff-list');
+    if (!filtered.length) {
+        list.innerHTML = `<div class="fund-flow-empty">No ${fundFlowTab === 'all' ? 'transactions' : fundFlowTab} yet.</div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map(item => {
+        const isDep   = item.type === 'deposit';
+        const icon    = isDep ? '⬇️' : '⬆️';
+        const color   = isDep ? 'var(--c-emerald-l)' : 'var(--c-red-l)';
+        const label   = isDep ? 'Deposit' : 'Withdrawal';
+        const sign    = isDep ? '+' : '−';
+        const dateStr = new Date(item.date).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+        const meta    = [item.method, item.reason].filter(Boolean).join(' · ');
+        return `<div class="fund-flow-item">
+            <div class="fund-flow-icon ${isDep ? 'dep' : 'wth'}">${icon}</div>
+            <div class="fund-flow-info">
+                <div class="fund-flow-type">${label}</div>
+                <div class="fund-flow-meta">${dateStr}${meta ? ' · ' + meta : ''}</div>
+            </div>
+            <div class="fund-flow-amount" style="color:${color}">${sign}$${item.amount.toFixed(2)}</div>
+        </div>`;
+    }).join('');
 }
 
 /* ── AI Analysis via Claude API ── */
@@ -1943,7 +2259,8 @@ function renderReviewHeatmap(periodTrades) {
     wrap.innerHTML = '';
     const { start, end } = getReviewPeriod();
     const plByDate={}, countByDate={};
-    periodTrades.forEach(t=>{ const key=new Date(t.opened).toISOString().slice(0,10); plByDate[key]=(plByDate[key]||0)+tradePL(t); countByDate[key]=(countByDate[key]||0)+1; });
+    function localDateKey(dateStr) { const d=new Date(dateStr); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+    periodTrades.forEach(t=>{ const key=localDateKey(t.opened); plByDate[key]=(plByDate[key]||0)+tradePL(t); countByDate[key]=(countByDate[key]||0)+1; });
 
     function cellColor(pl, count) {
         if (!count) return '#1c1c1f';
@@ -1961,7 +2278,7 @@ function renderReviewHeatmap(periodTrades) {
         const row=document.createElement('div'); row.className='heatmap-row';
         const lbl=document.createElement('div'); lbl.className='heatmap-label'; row.appendChild(lbl);
         for (let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
-            const key=d.toISOString().slice(0,10), pl=plByDate[key]||0, cnt=countByDate[key]||0;
+            const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, pl=plByDate[key]||0, cnt=countByDate[key]||0;
             const cell=document.createElement('div'); cell.className='heatmap-cell';
             cell.style.background=cellColor(pl,cnt); cell.style.color=cnt?'#fff':'transparent';
             cell.textContent=cnt||''; cell.title=`${key}: ${cnt} trade${cnt!==1?'s':''}, P/L $${pl.toFixed(2)}`;
@@ -1982,7 +2299,7 @@ function renderReviewHeatmap(periodTrades) {
             const weekNum=Math.ceil((cur-gridStart)/(7*86400000))+1;
             const lbl=document.createElement('div'); lbl.className='heatmap-label'; lbl.textContent='W'+weekNum; row.appendChild(lbl);
             for (let i=0;i<7;i++) {
-                const key=cur.toISOString().slice(0,10), inPeriod=cur>=start&&cur<=end;
+                const key=`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}-${String(cur.getDate()).padStart(2,'0')}`, inPeriod=cur>=start&&cur<=end;
                 const pl=plByDate[key]||0, cnt=countByDate[key]||0;
                 const cell=document.createElement('div'); cell.className='heatmap-cell';
                 cell.style.background=inPeriod?cellColor(pl,cnt):'transparent';
@@ -2026,10 +2343,228 @@ function generateInsights(periodTrades, stats) {
     return insights;
 }
 
+/* ====================== DEPOSIT/WITHDRAWAL FUNCTIONS ====================== */
+function openDepositModal() {
+    document.getElementById('depositModal').classList.add('open');
+}
+
+function closeDepositModal() {
+    document.getElementById('depositModal').classList.remove('open');
+    document.getElementById('depositForm').reset();
+}
+
+async function submitDeposit() {
+    const amount = parseFloat(document.getElementById('depositAmount').value);
+    const method = document.getElementById('depositMethod').value;
+    const reason = document.getElementById('depositReason').value;
+
+    if (!amount || amount <= 0) {
+        showToast('Please enter a valid amount', 'error');
+        return;
+    }
+    if (!method) {
+        showToast('Please select a payment method', 'error');
+        return;
+    }
+
+    try {
+        const depositId = `DEP-${Date.now()}`;
+        const { error } = await db
+            .from('deposits')
+            .insert([{
+                deposit_id: depositId,
+                user_id: currentUser.id,
+                amount,
+                payment_method: method,
+                reason
+            }]);
+
+        if (error) throw error;
+
+        showToast(`✅ Deposit of $${amount.toFixed(2)} successful!`, 'success');
+        closeDepositModal();
+
+        // Refresh globals
+        const [newDep, newWth] = await Promise.all([
+            db.from('deposits').select('*').eq('user_id', currentUser.id),
+            db.from('withdrawals').select('*').eq('user_id', currentUser.id),
+        ]);
+        allDeposits    = newDep.data || [];
+        allWithdrawals = newWth.data || [];
+
+        await renderDashboard();
+        renderTrades();
+        renderFundFlow();
+        
+    } catch(err) {
+        console.error('Deposit error:', err);
+        showToast('❌ Failed to process deposit', 'error');
+    }
+}
+
+function openWithdrawalModal() {
+    document.getElementById('withdrawalModal').classList.add('open');
+}
+
+function closeWithdrawalModal() {
+    document.getElementById('withdrawalModal').classList.remove('open');
+    document.getElementById('withdrawalForm').reset();
+}
+
+async function submitWithdrawal() {
+    const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+    const method = document.getElementById('withdrawalMethod').value;
+    const reason = document.getElementById('withdrawalReason').value;
+
+    if (!amount || amount <= 0) {
+        showToast('Please enter a valid amount', 'error');
+        return;
+    }
+    if (!method) {
+        showToast('Please select a withdrawal method', 'error');
+        return;
+    }
+    if (!reason) {
+        showToast('Please provide a reason for withdrawal', 'error');
+        return;
+    }
+
+    try {
+        // Balance check using globals
+        const totalDeposits    = allDeposits.reduce((s,d) => s + parseFloat(d.amount||0), 0);
+        const totalWithdrawals = allWithdrawals.reduce((s,w) => s + parseFloat(w.amount||0), 0);
+        const netPL = trades.reduce((a,t)=>a+parseFloat(t.pl||0),0);
+        const currentBalance = startingBalance + totalDeposits - totalWithdrawals + netPL;
+
+        // Validate balance
+        if (amount > currentBalance) {
+            showToast(`❌ Insufficient balance. Available: $${currentBalance.toFixed(2)}`, 'error');
+            return;
+        }
+
+        // Insert withdrawal record
+        const withdrawalId = `WTH-${Date.now()}`;
+        const { error } = await db
+            .from('withdrawals')
+            .insert([{
+                withdrawal_id: withdrawalId,
+                user_id: currentUser.id,
+                amount,
+                withdrawal_method: method,
+                reason
+            }]);
+
+        if (error) throw error;
+
+        showToast(`✅ Withdrawal of $${amount.toFixed(2)} successful!`, 'success');
+        closeWithdrawalModal();
+
+        // Refresh globals
+        const [newDep, newWth] = await Promise.all([
+            db.from('deposits').select('*').eq('user_id', currentUser.id),
+            db.from('withdrawals').select('*').eq('user_id', currentUser.id),
+        ]);
+        allDeposits    = newDep.data || [];
+        allWithdrawals = newWth.data || [];
+
+        await renderDashboard();
+        renderTrades();
+        renderFundFlow();
+        
+    } catch(err) {
+        console.error('Withdrawal error:', err);
+        showToast('❌ Failed to process withdrawal', 'error');
+    }
+}
+
+function showToast(msg, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
 /* ====================== INIT ====================== */
 // Boot handled by getSession() IIFE above — mirrors index.html pattern.
 // Init AI key UI state on load so button visibility is correct
 setTimeout(initAiKeyUI, 200);
 </script>
+
+<!-- DEPOSIT MODAL -->
+<div id="depositModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title"><i class="fas fa-arrow-down" style="margin-right:0.5rem;color:var(--c-emerald)"></i>Deposit Funds</div>
+            <button class="modal-close" onclick="closeDepositModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="depositForm">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Deposit Amount ($)</label>
+                    <input type="number" id="depositAmount" class="modal-form-input" placeholder="0.00" step="0.01" min="0" required>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Payment Method</label>
+                    <select id="depositMethod" class="modal-form-select" required>
+                        <option value="">Select method...</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="Crypto">Crypto</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Reason/Notes (Optional)</label>
+                    <textarea id="depositReason" class="modal-form-textarea" placeholder="Add any notes about this deposit..."></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeDepositModal()">Cancel</button>
+            <button class="btn-confirm" onclick="submitDeposit()">Confirm Deposit</button>
+        </div>
+    </div>
+</div>
+
+<!-- WITHDRAWAL MODAL -->
+<div id="withdrawalModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title"><i class="fas fa-arrow-up" style="margin-right:0.5rem;color:var(--c-red)"></i>Withdraw Funds</div>
+            <button class="modal-close" onclick="closeWithdrawalModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="withdrawalForm">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Withdrawal Amount ($)</label>
+                    <input type="number" id="withdrawalAmount" class="modal-form-input" placeholder="0.00" step="0.01" min="0" required>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Withdrawal Method</label>
+                    <select id="withdrawalMethod" class="modal-form-select" required>
+                        <option value="">Select method...</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="Crypto">Crypto</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Reason for Withdrawal</label>
+                    <textarea id="withdrawalReason" class="modal-form-textarea" placeholder="Why are you withdrawing?..." required></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeWithdrawalModal()">Cancel</button>
+            <button class="btn-confirm" onclick="submitWithdrawal()">Confirm Withdrawal</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
